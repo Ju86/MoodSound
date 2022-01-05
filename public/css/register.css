@@ -1,0 +1,39 @@
+.container {
+    font-size: 1.6rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: black;
+  } 
+
+  .content {
+      height: 500px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+
+  }
+
+  .register {
+      display: flex;
+      align-items: center;
+    flex-direction: column;
+    color: var(--text-color);
+   
+  }
+
+  .register h1 {
+      text-align: center;
+  }
+
+.popUp span {
+    opacity: 0;
+    display: none;
+    transition: opacity 0.8s;
+    }
+
+.popUp:hover span {
+    opacity: 1;
+    display: inline;
+    }

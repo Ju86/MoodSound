@@ -1,0 +1,157 @@
+.container {
+  font-size: 1.6rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  background: black;
+  background-size: contain;
+  font-family: "Gloria Hallelujah", cursive;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.welcome {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-end;
+}
+
+.welcome h1 {
+  font-size: 6rem;
+  color: #009432;
+  display: flex;
+  align-items: flex-start;
+}
+
+.welcome p {
+  font-size: 3rem;
+  color: #2f4858;
+  font-weight: 20px;
+  line-height: 50px;
+}
+
+/* form {
+  display: flex;
+  align-items: center;
+} */
+
+.form-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #2f4858;
+  font-size: 3rem;
+}
+
+.form-content {
+  width: 500px;
+  height: 540px;
+  color: #2f4858;
+  font-size: 3rem;
+}
+
+.form-control {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+input {
+  width: 480px;
+}
+
+label {
+  color: #006977;
+}
+
+option {
+  color: #2f4858;
+}
+
+select {
+  width: 480px;
+  height: 45px;
+  margin: 6px;
+  background-color: var(--primary);
+  color: #2f4858;
+  font-size: 3rem;
+}
+
+textarea {
+  width: 480px;
+  height: 120px;
+  font-size: 3rem;
+  margin: 6px;
+  background-color: var(--primary);
+  color: #2f4858;
+}
+
+.btn-primary {
+  background-color: var(--background-light2);
+  color: var(--text-color);
+  font-size: 2rem;
+  height: 50px;
+  width: 250px;
+  margin: 6px;
+  border-radius: 10px;
+  opacity: 0.9;
+  font-weight: bolder;
+}
+
+.btn-primary:hover {
+  background-color: var(--background-light2);
+  opacity: 1;
+}
+
+@media screen and (max-width: 500px) {
+  * {
+    overflow-x: hidden;
+  }
+
+  .welcome h1 {
+    font-size: 5rem;
+    margin: 50px;
+  }
+
+  .welcome p {
+    font-size: 2.5rem;
+    margin: 10px;
+  }
+
+  .content {
+    flex-direction: column;
+    font-size: 2rem;
+  }
+
+  .form-control {
+    font-size: 2.5rem;
+  }
+
+  input {
+    width: 350px;
+    font-size: 2rem;
+  }
+
+  textarea {
+    width: 350px;
+    font-size: 2rem;
+  }
+
+  select {
+    width: 350px;
+    font-size: 2rem;
+  }
+}

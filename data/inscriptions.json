@@ -1,0 +1,23 @@
+[
+  {
+    "pseudo": "julien",
+    "email": "julien@free.com",
+    "dateNaissance": "2021-12-17",
+    "password": "123456789",
+    "id": 1639754674
+  },
+  {
+    "pseudo": "admin",
+    "email": "paulpersavon@outlook.com",
+    "dateNaissance": "1986-03-11",
+    "password": "ggpo62680",
+    "id": 1639838582
+  },
+  {
+    "pseudo": "paul",
+    "email": "paul@outlook.com",
+    "dateNaissance": "1986-03-11",
+    "password": "ggpo62680",
+    "id": 1639838586
+  }
+]

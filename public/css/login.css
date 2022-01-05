@@ -1,0 +1,28 @@
+.container {
+    font-size: 1.6rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: black;
+  } 
+
+  .content {
+      height: 500px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+
+  }
+
+  .login {
+      display: flex;
+      align-items: center;
+    flex-direction: column;
+    color: var(--text-color);
+   
+  }
+
+  .login h1 {
+      text-align: center;
+  }

@@ -1,0 +1,17 @@
+.container {
+  font-size: 1.6rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: black;
+}
+
+.content {
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  color: var(--text-color);
+  margin-top: 50px;
+}
