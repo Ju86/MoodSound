@@ -9,8 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'email' => FILTER_SANITIZE_EMAIL
     ]);
 
-    $username = $_input['username'] ?? '';
     $email = $_input['email'] ?? '';
+    $username = $_input['username'] ?? '';
     $password = $_POST['password'] ?? '';
 
     if (!$username || !$password || !$email) {

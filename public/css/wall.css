@@ -1,0 +1,41 @@
+.container {
+    min-height: 100vh;
+    display:flex;
+   
+}
+
+
+.category {
+    background-color: yellowgreen;
+    display: flex;
+    position: fixed;
+}
+
+.tchat {
+    background-color: aqua;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    width: 1200px;
+}
+
+
+.form-container {
+    background-color: slategray;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    width: 1200px;
+    
+}
+
+.input-tchat {
+    background-color: khaki;
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    width: 1200px;
+
+}
+

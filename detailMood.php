@@ -37,9 +37,12 @@ if (!$id) {
 
 <head>
 
-    <?php require_once 'includes/head.php' ?>
-    <link rel="stylesheet" href="/public/css/detailMood.css">
-
+<meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+    
     <title>MoodSound</title>
 
 </head>
@@ -49,13 +52,12 @@ if (!$id) {
     <div class="container">
 
         <div class="content">
-            <a href="/">Page d'acceuil</a>
-            <img class="article-cover-img" src="<?= $mood['sound'] ?>" alt="">
+            <iframe class="img-container" width="458" height="257" src="<?= $mood['sound'] ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             <h1 class="article-title"><?= $mood['title'] ?></h1>
             <div class="article-content"><?= $mood['content'] ?></div>
             <div class="action">
                 <a class="btn btn-secondary" href="/deleteMood.php?id=<?= $mood['idmood'] ?>">Delete</a>
-                <!-- <a class="btn btn-primary" href="/share.php?id=<?= $mood['idmood'] ?>">Edit</a> -->
+                <a class="btn btn-primary" href="/share.php?id=<?= $mood['idmood'] ?>">Edit</a>
             </div>
         </div>
 

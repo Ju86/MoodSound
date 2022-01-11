@@ -13,10 +13,14 @@ if ($sessionId) {
     // echo "<pre>";
     // var_dump(($session));
     // echo "</pre>";
-    $userStatement = $pdo->prepare('SELECT * FROM users WHERE id=:id');
-    $userStatement->bindValue(':id', $session['user_id']);
+    $userStatement = $pdo->prepare('SELECT * FROM users WHERE iduser=:id');
+    $userStatement->bindValue(':id', $session['iduser']);
     $userStatement->execute();
     $user = $userStatement->fetch();
+
+    
+
 }
 return $user ?? false;
+
 }

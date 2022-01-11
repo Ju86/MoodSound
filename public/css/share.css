@@ -3,9 +3,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-
-  background: black;
-  background-size: contain;
+  background-color: white;
   font-family: "Gloria Hallelujah", cursive;
 }
 

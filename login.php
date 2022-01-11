@@ -24,12 +24,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // echo "</pre>";
 
         if ($user && password_verify($password, $user['password'])) {
-            $statementSession = $pdo->prepare('INSERT INTO session VALUES (default, :userid)');
-            $statementSession->bindValue(':userid', $user['id']);
+            $statementSession = $pdo->prepare('INSERT INTO session VALUES (default, :iduser)');
+            $statementSession->bindValue(':iduser', $user['iduser']);
             $statementSession->execute();
             $sessionId = $pdo->lastInsertId();
-            setcookie('session', $sessionId, time() + 60 * 3, '', '', false, true);
-            header('Location: /profile.php');
+            setcookie('session', $sessionId, time() + 60 * 60, '', '', false, true);
+            header('Location: /shareWall.php');
         } else {
             echo "WRONG MAIL AND/OR PASSWORD";
         }
