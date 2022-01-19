@@ -3,9 +3,14 @@
 require './isLoggedIn.php';
 $user = isLoggedIn();
 
+// echo "<pre>";
+// var_dump($user);
+// echo "</pre>";
+// die();
+
 $pdo = require './database.php';
 
-// $profilStatement = $pdo->prepare('SELECT * FROM profil');
+// $profilStatement = $pdo->prepare('SELECT * FROM profil ');
 // $profilStatement->execute();
 // $profils = $profilStatement->fetchAll();
 
@@ -34,25 +39,25 @@ INSERT INTO profil (
 $stateUpdate = $pdo->prepare('
 UPDATE profil
 SET
-avatar=:avatar
-sound1=:sound1
-sound2=:sound2
-sound3=:sound3
-sound4=:sound4
+avatar=:avatar,
+sound1=:sound1,
+sound2=:sound2,
+sound3=:sound3,
+sound4=:sound4,
 presentation=:presentation
 WHERE idprofil=:id
 ');
 
-$stateRead = $pdo->prepare('SELECT * FROM profil WHERE idprofil=:id');
+$stateRead = $pdo->prepare('SELECT * FROM profil WHERE iduser=:id');
 
-
-$_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-$id = $_GET['id'] ?? '';
-
-if ($id) {
-    $stateRead->bindValue(':id', $id);
+if ($user) {
+    $stateRead->bindValue(':id', $user['iduser']);
     $stateRead->execute();
     $profil = $stateRead->fetch();
+    // echo "<pre>";
+    // var_dump($profil);
+    // echo "</pre>";
+    // die();
     $avatar = $profil['avatar'];
     $sound1 = $profil['sound1'];
     $sound2 = $profil['sound2'];
@@ -80,23 +85,24 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $sound4 = $_POST['sound4'] ?? '';
     $presentation = $_POST['presentation'] ?? '';
 
-    if ($id) {
-        $profils['avatar'] = $avatar;
-        $profils['sound1'] = $sound1;
-        $profils['sound2'] = $sound2;
-        $profils['sound3'] = $sound3;
-        $profils['sound4'] = $sound4;
-        $profils['presentation'] = $presentation;
-        $stateUpdate->bindValue(':avatar',  $profils['avatar']);
+    if ($user) {
+        // header('Location: /login.php');
+        // $profil['avatar'] = $avatar;
+        // $profil['sound1'] = $sound1;
+        // $profil['sound2'] = $sound2;
+        // $profil['sound3'] = $sound3;
+        // $profil['sound4'] = $sound4;
+        // $profil['presentation'] = $presentation;
+        $stateUpdate->bindValue(':avatar',  $avatar);
         $stateUpdate->bindValue(':sound1',  str_replace("youtu.be/", "youtube.com/embed/", $sound1));
         $stateUpdate->bindValue(':sound2',  str_replace("youtu.be/", "youtube.com/embed/", $sound2));
         $stateUpdate->bindValue(':sound3',  str_replace("youtu.be/", "youtube.com/embed/", $sound3));
         $stateUpdate->bindValue(':sound4',  str_replace("youtu.be/", "youtube.com/embed/", $sound4));
-        $stateUpdate->bindValue(':presentation', $profils['presentation']);
-        $stateUpdate->bindValue(':iduser',  $user['iduser']);
-        $stateUpdate->bindValue(':id',  $id);
+        $stateUpdate->bindValue(':presentation', $presentation);
+        $stateUpdate->bindValue(':id', $profil['idprofil']);
         $stateUpdate->execute();
     } else {
+        // header('Location: /index.php');
         $stateCreate->bindValue(':avatar',  $avatar);
         $stateCreate->bindValue(':sound1',  str_replace("youtu.be/", "youtube.com/embed/", $sound1));
         $stateCreate->bindValue(':sound2',  str_replace("youtu.be/", "youtube.com/embed/", $sound2));
@@ -132,9 +138,9 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
             <div class="sous-content1">
 
-                <h1><?= $id ? "Modifier " : "Compléter " ?>mon profil</h1>
+                <h1><?= $user['iduser'] ? "Modifier " : "Compléter " ?>mon profil</h1>
 
-                <form class="profile" action="/profile.php<?= $id ? "?id=$id" : '' ?>" method="POST">
+                <form class="profile" action="/profile.php" method="POST">
 
                     <div class="form-control">
                         <label for="avatar">Choisis ton avatar : </label>
@@ -174,8 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
                     <br>
 
-                    <button class="btn btn-primary"><?= $id ? 'Modifier' : 'Sauvegarder' ?></button>
-                    <!-- <button>SUBMIT</button> -->
+                    <button class="btn btn-primary"><?= $user['iduser'] ? 'Modifier' : 'Sauvegarder' ?></button>
 
                 </form>
 
@@ -183,16 +188,12 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
             <div class="sous-content2">
 
-                <!-- <?php foreach ($profils as $a) : ?> -->
-
-                    <span><img class="profil-cover-img" src="<?= $a['avatar'] ?>" alt=""><?= $user['username'] ?></span>
-                    <iframe class=" sound" width="229" height="128" src="<?= $a['sound1'] ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    <iframe class="sound" width="229" height="128" src="<?= $a['sound2'] ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    <iframe class="sound" width="229" height="128" src="<?= $a['sound3'] ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    <iframe class="sound" width="229" height="128" src="<?= $a['sound4'] ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    <div class="presentation"><?= $a['presentation'] ?></div>
-
-                <!-- <?php endforeach; ?> -->
+                <span><img class="profil-cover-img" src="<?= $avatar ?? '' ?>" alt=""><?= $user['username'] ?></span>
+                <iframe class=" sound" width="229" height="128" src="<?= $sound1 ?? '' ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe class="sound" width="229" height="128" src="<?= $sound2 ?? '' ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe class="sound" width="229" height="128" src="<?= $sound3 ?? '' ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe class="sound" width="229" height="128" src="<?= $sound4 ?? '' ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <div class="presentation"><?= $presentation ?? '' ?></div>
 
             </div>
 
