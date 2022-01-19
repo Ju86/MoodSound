@@ -2,7 +2,7 @@
 
 function isLoggedIn()
 {
-    $pdo = require_once './database.php';
+    $pdo = require './database.php';
     $sessionId = $_COOKIE['session'] ?? '';
 
 if ($sessionId) {

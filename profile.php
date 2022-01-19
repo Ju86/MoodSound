@@ -1,68 +1,112 @@
 <?php
 
-require_once './isLoggedIn.php';
-
+require './isLoggedIn.php';
 $user = isLoggedIn();
 
-if (!$user) {
-    header('Location: /login.php');
-}
+$pdo = require './database.php';
 
-?>
+// $profilStatement = $pdo->prepare('SELECT * FROM profil');
+// $profilStatement->execute();
+// $profils = $profilStatement->fetchAll();
 
-<?php
-
-$pdo = require_once './database.php';
-
-$statement = $pdo->prepare('SELECT * FROM profil');
-$statement->execute();
-
-$tchats = $statement->fetchAll();
-
-$_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+// $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 $stateCreate = $pdo->prepare('
-INSERT INTO tchat (
-    message
+INSERT INTO profil (
+    avatar,
+    sound1,
+    sound2,
+    sound3,
+    sound4,
+    presentation,
+    iduser
     ) VALUES (
-        :message
+        :avatar,
+        :sound1,
+        :sound2,
+        :sound3,
+        :sound4,
+        :presentation,
+        :iduser
         )
 ');
 
 $stateUpdate = $pdo->prepare('
-UPDATE tchat
+UPDATE profil
 SET
-message=:message
-WHERE idtchat=:id
+avatar=:avatar
+sound1=:sound1
+sound2=:sound2
+sound3=:sound3
+sound4=:sound4
+presentation=:presentation
+WHERE idprofil=:id
 ');
 
-$stateRead = $pdo->prepare('SELECT * FROM tchat WHERE idtchat=:id' );
+$stateRead = $pdo->prepare('SELECT * FROM profil WHERE idprofil=:id');
 
- 
+
 $_GET = filter_input_array(INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 $id = $_GET['id'] ?? '';
 
+if ($id) {
+    $stateRead->bindValue(':id', $id);
+    $stateRead->execute();
+    $profil = $stateRead->fetch();
+    $avatar = $profil['avatar'];
+    $sound1 = $profil['sound1'];
+    $sound2 = $profil['sound2'];
+    $sound3 = $profil['sound3'];
+    $sound4 = $profil['sound4'];
+    $presentation = $profil['presentation'];
+}
+
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $_POST = filter_input_array(INPUT_POST, [
-        'message' => [
-            'filter' => FILTER_SANITIZE_STRING,
-            'flags' => FILTER_FLAG_NO_ENCODE_QUOTES
-        ]
+
+        'avatar' => FILTER_SANITIZE_URL,
+        'sound1' => FILTER_SANITIZE_URL,
+        'sound2' => FILTER_SANITIZE_URL,
+        'sound3' => FILTER_SANITIZE_URL,
+        'sound4' => FILTER_SANITIZE_URL,
+        'presentation' => FILTER_SANITIZE_FULL_SPECIAL_CHARS
+
     ]);
 
-    $message = $_POST['message'] ?? '';
+    $avatar = $_POST['avatar'] ?? '';
+    $sound1 = $_POST['sound1'] ?? '';
+    $sound2 = $_POST['sound2'] ?? '';
+    $sound3 = $_POST['sound3'] ?? '';
+    $sound4 = $_POST['sound4'] ?? '';
+    $presentation = $_POST['presentation'] ?? '';
 
     if ($id) {
-        $tchats['message'] = $message;
-        $stateUpdate->bindValue(':message',  $tchats['message']);
+        $profils['avatar'] = $avatar;
+        $profils['sound1'] = $sound1;
+        $profils['sound2'] = $sound2;
+        $profils['sound3'] = $sound3;
+        $profils['sound4'] = $sound4;
+        $profils['presentation'] = $presentation;
+        $stateUpdate->bindValue(':avatar',  $profils['avatar']);
+        $stateUpdate->bindValue(':sound1',  str_replace("youtu.be/", "youtube.com/embed/", $sound1));
+        $stateUpdate->bindValue(':sound2',  str_replace("youtu.be/", "youtube.com/embed/", $sound2));
+        $stateUpdate->bindValue(':sound3',  str_replace("youtu.be/", "youtube.com/embed/", $sound3));
+        $stateUpdate->bindValue(':sound4',  str_replace("youtu.be/", "youtube.com/embed/", $sound4));
+        $stateUpdate->bindValue(':presentation', $profils['presentation']);
+        $stateUpdate->bindValue(':iduser',  $user['iduser']);
         $stateUpdate->bindValue(':id',  $id);
         $stateUpdate->execute();
     } else {
-        $stateCreate->bindValue(':message',  $message);
+        $stateCreate->bindValue(':avatar',  $avatar);
+        $stateCreate->bindValue(':sound1',  str_replace("youtu.be/", "youtube.com/embed/", $sound1));
+        $stateCreate->bindValue(':sound2',  str_replace("youtu.be/", "youtube.com/embed/", $sound2));
+        $stateCreate->bindValue(':sound3',  str_replace("youtu.be/", "youtube.com/embed/", $sound3));
+        $stateCreate->bindValue(':sound4',  str_replace("youtu.be/", "youtube.com/embed/", $sound4));
+        $stateCreate->bindValue(':presentation', $presentation);
+        $stateCreate->bindValue(':iduser',  $user['iduser']);
         $stateCreate->execute();
     }
-    header('Location: /shareWall.php');
-
+    header('Location: /profile.php');
 }
 
 ?>
@@ -82,56 +126,78 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     <div class="container">
 
-        <nav class="menu">
-
-            <a class="popUp" href="/"><img src="/img/outline_home_work_white_24dp.png" alt="Accueil"><span>Accueil</span></a>
-
-            <a class="popUp" href="/profile.php"><img src="/img/outline_account_box_white_24dp.png" alt="Profil"><span>Profil</span></a>
-
-            <a class="popUp" href="/logout.php"><img src="/img/outline_logout_white_24dp.png" alt="Se déconnecter"><span>Se déconnecter</span></a>
-
-        </nav>
+        <?php require_once 'includes/header.php' ?>
 
         <div class="content">
 
-            <h2>Hello <?= $user['username'] ?></h2>
+            <div class="sous-content1">
 
-            <form action="/profile.php<?= $id ? "?id=$id" : '' ?>" method="POST">
-                   
+                <h1><?= $id ? "Modifier " : "Compléter " ?>mon profil</h1>
+
+                <form class="profile" action="/profile.php<?= $id ? "?id=$id" : '' ?>" method="POST">
+
                     <div class="form-control">
-                        <label for="image">Avatar</label>
-                        <input type="text" name="image" id="image" value="<?= $image ?? '' ?>">
-                        <p class="text-error"><?= $errors['image']?></p>
+                        <label for="avatar">Choisis ton avatar : </label>
+                        <br>
+                        <input type="text" name="avatar" id="avatar" value="<?= $avatar ?? '' ?>">
+
                     </div>
                     <div class="form-control">
-                        <label for="sound1">La plus belle chanson de tous les temps ?</label>
-                        <input type="text" placeholder="URL Youtube" name="sound1" id="sound1" value="<?= $sound ?? '' ?>">
-                        <p class="text-error"><?= $errors['sound1']?></p>
+                        <label for="sound1">Ta plus belle chanson de tous les temps ?</label>
+                        <br>
+                        <input type="text" name="sound1" id="sound1" value="<?= $sound1 ?? '' ?>">
+
                     </div>
                     <div class="form-control">
-                        <label for="sound2">La meilleur chanson pour danser ivre mort-e ?</label>
-                        <input type="text" placeholder="URL Youtube" name="sound2" id="sound2" value="<?= $sound ?? '' ?>">
-                        <p class="text-error"><?= $errors['sound2']?></p>
+                        <label for="sound2">Ta meilleur chanson pour danser ivre (mort-e) ?</label>
+                        <br>
+                        <input type="text" name="sound2" id="sound2" value="<?= $sound2 ?? '' ?>">
+
                     </div>
                     <div class="form-control">
-                        <label for="sound3">La Chanson pour une nuit d'amour ?</label>
-                        <input type="text" placeholder="URL Youtube" name="sound3" id="sound3" value="<?= $sound ?? '' ?>">
-                        <p class="text-error"><?= $errors['sound3']?></p>
+                        <label for="sound3">Ta chanson pour une nuit d'amour ?</label>
+                        <br>
+                        <input type="text" name="sound3" id="sound3" value="<?= $sound3 ?? '' ?>">
+
                     </div>
                     <div class="form-control">
-                        <label for="sound4">La chanson plaisir coupable ?</label>
-                        <input type="text" placeholder="URL Youtube" name="sound4" id="sound4" value="<?= $sound ?? '' ?>">
-                        <p class="text-error"><?= $errors['sound4']?></p>
+                        <label for="sound4">Ta chanson plaisir coupable ?</label>
+                        <br>
+                        <input type="text" name="sound4" id="sound4" value="<?= $sound4 ?? '' ?>">
                     </div>
+
                     <div class="form-control">
-                        <label for="content">Content</label>
-                        <textarea name="content" id="content"><?= $content ?? '' ?></textarea>
-                        <p class="text-error"><?= $errors['content']?></p>
+                        <label for="presentation">Présente- toi en quelques lignes : </label>
+                        <br>
+                        <textarea name="presentation" id="presentation"><?= $presentation ?? '' ?></textarea>
                     </div>
+
+                    <br>
+
+                    <button class="btn btn-primary"><?= $id ? 'Modifier' : 'Sauvegarder' ?></button>
+                    <!-- <button>SUBMIT</button> -->
+
+                </form>
+
+            </div>
+
+            <div class="sous-content2">
+
+                <!-- <?php foreach ($profils as $a) : ?> -->
+
+                    <span><img class="profil-cover-img" src="<?= $a['avatar'] ?>" alt=""><?= $user['username'] ?></span>
+                    <iframe class=" sound" width="229" height="128" src="<?= $a['sound1'] ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <iframe class="sound" width="229" height="128" src="<?= $a['sound2'] ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <iframe class="sound" width="229" height="128" src="<?= $a['sound3'] ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <iframe class="sound" width="229" height="128" src="<?= $a['sound4'] ?>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <div class="presentation"><?= $a['presentation'] ?></div>
+
+                <!-- <?php endforeach; ?> -->
+
+            </div>
+
 
         </div>
-
-        
 
     </div>
 

@@ -1,29 +1,46 @@
-.container {
-    font-size: 1.6rem;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background: black;
-    
-  } 
+.content {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  flex-direction: row;
+}
 
-  .content {
-      height: 500px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+.sous-content1 {
+  display: flex;
+  width: 36%;
+  height: 90vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
+.sous-content2 {
+  display: flex;
+  width: 36%;
+  height: 90vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
-  }
+.login {
+  width: 67%;
+  height: 62vh;
+  font-size: 1.6rem;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  box-shadow: 10px 5px 5px gainsboro;
+}
 
-  .login {
-      display: flex;
-      align-items: center;
-    flex-direction: column;
-    color: var(--text-color);
-   
-  }
+.login button {
+  color: var(--text-color-white);
+  font-size: 1.4rem ;
+}
 
-  .login h1 {
-      text-align: center;
-  }
+input {
+  width: 14rem;
+  height: 1.5rem;
+}

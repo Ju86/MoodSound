@@ -1,6 +1,10 @@
 <?php
 
-$pdo = require_once './database.php';
+
+require_once './isLoggedIn.php';
+$user = isLoggedIn();
+
+$pdo = require './database.php';
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -54,49 +58,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div class="container">
 
-        <nav class="menu">
-            <a class="popUp" href="/"><img src="/img/outline_home_work_white_24dp.png" alt="Accueil"><span>Accueil</span></a>
-            <a class="popUp" href="/register.php/"><img src="/img/outline_assignment_white_24dp.png" alt="S'inscrire"><span>S'inscrire</span></a>
-            <a class="popUp" href="/login.php"><img src="/img/outline_login_white_24dp.png" alt="Se connecter"><span>Se connecter</span></a>
-
-        </nav>
+        <?php require_once 'includes/header.php' ?>
 
         <div class="content">
 
-            <form class="register" action="/register.php" method="POST">
+            <div class="sous-content1">
 
-                <h1>Bienvenue sur MoodSound,
+                <p class="text">
+                    L’être humain peut ressentir une multitude d’émotions, la musique peut
+                    refléter toutes les émotions possibles.
                     <br>
                     <br>
-                </h1>
+                    Crée ton MoodSound en associant ton humeur à une musique et partage-le sur le tchat de la communauté.
+                    <br>
+                    <br>
+                    N'attend plus, inscris-toi !!!
+                </p>
 
+            </div>
 
-                <div>
-                    <label for="pseudo">Pseudo : </label><br>
-                    <input type="text" placeholder="username" name="username"><br><br>
-                </div>
+            <div class="sous-content2">
 
-                <div>
-                    <label for="email">Email : </label><br>
-                    <input type="text" placeholder="email" name="email"><br><br>
-                </div>
+                <form class="register" action="/register.php" method="POST">
 
-                <div>
-                    <label for="password">Mot de passe : </label><br>
-                    <input type="password" placeholder="password" name="password"><br><br>
-                </div>
+                    <h1>S'inscrire</h1>
 
-                <?php if ($error) : ?>
-                    <h1 style="color:red"><?= $error ?></h1>
-                <?php endif; ?>
+                    <div>
+                        <label for="pseudo">Pseudo : </label><br>
+                        <input type="text" placeholder="username" name="username"><br>
+                    </div>
 
-                <button>S'inscrire</button>
+                    <div>
+                        <label for="email">Email : </label><br>
+                        <input type="text" placeholder="email" name="email"><br>
+                    </div>
 
-            </form>
+                    <div>
+                        <label for="password">Mot de passe : </label><br>
+                        <input type="password" placeholder="password" name="password"><br>
+                    </div>
+
+                    <?php if ($error) : ?>
+                        <h1 style="color:red"><?= $error ?></h1>
+                    <?php endif; ?>
+
+                    <button>S'inscrire</button>
+
+                </form>
+
+            </div>
+
         </div>
+
     </div>
 
-
+    </div>
 
 </body>
 

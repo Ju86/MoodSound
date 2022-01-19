@@ -1,6 +1,10 @@
 <?php
 
-$pdo = require_once './database.php';
+require_once './isLoggedIn.php';
+$user = isLoggedIn();
+
+
+$pdo = require './database.php';
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -29,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $statementSession->execute();
             $sessionId = $pdo->lastInsertId();
             setcookie('session', $sessionId, time() + 60 * 60, '', '', false, true);
-            header('Location: /shareWall.php');
+            header('Location: /profile.php');
         } else {
             echo "WRONG MAIL AND/OR PASSWORD";
         }
@@ -56,22 +60,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div class="container">
 
-        <nav class="menu">
-
-            <a class="popUp" href="/"><img src="/img/outline_home_work_white_24dp.png" alt="Accueil"><span>Accueil</span></a>
-            <a class="popUp" href="/login.php"><img src="/img/outline_login_white_24dp.png" alt="Se connecter"><span>Se connecter</span></a>
-            <a class="popUp" href="/register.php/"><img src="/img/outline_assignment_white_24dp.png" alt="S'inscrire"><span>S'inscrire</span></a>
-
-        </nav>
+        <?php require_once 'includes/header.php' ?>
 
         <div class="content">
-
+    
+<div class="sous-content1"></div>
+<div class="sous-content2">
             <form class="login" action="/login.php" method="POST">
 
-                <h1>Se connecter,
-                    <br>
-                    <br>
-                </h1>
+                <h1>Se connecter</h1>
 
                 <div>
                     <label for="email">Email : </label><br>
@@ -93,7 +90,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <button>Se connecter</button>
 
             </form>
+
+            </div>
+
+            
+
+            </div>
+
         </div>
+
     </div>
 
 </body>
